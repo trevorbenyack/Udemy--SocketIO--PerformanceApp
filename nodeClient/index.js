@@ -21,7 +21,15 @@ socket.on('connect', () => {
         }
     }
 
-    socket.emit('clientAuth', 'asdfasdasdf234513')
+    // client auth with single key value
+    socket.emit('clientAuth', 'asdfasdasdf234513');
+
+
+    performanceData().then((allPerformanceData) => {
+        allPerformanceData.macA = macA;
+        socket.emit('initPerfData', allPerformanceData)
+    });
+
 
     // start sending data over on interval
     let perfDataInterval = setInterval(() => {
@@ -32,6 +40,10 @@ socket.on('connect', () => {
             socket.emit('perfData', allPerformanceData);
         })
     }, 1000);
+
+    socket.on('disconnect', () => {
+        clearInterval(perfDataInterval);
+    });
 
 })
 
@@ -106,6 +118,7 @@ function cpuAverage() {
         total: totalMs / cpus.length
     }
 }
+
 
 // bc the times property is time since boot, we will get
 // now times, and 100ms from now times. Compare them, that will
