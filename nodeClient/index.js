@@ -1,6 +1,13 @@
 // The node program that captures local performance data
 // and sends it up to the socket.io server
 
+const io = require('socket.io-client');
+let socket = io('http://127.0.0.1:8181');
+
+socket.on('connect', () => {
+    console.log("I connected to the socket server!");
+})
+
 // What do we need to know from node about performance?
 // - CUP load (current
 // - Memory Usage
