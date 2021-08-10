@@ -67,7 +67,7 @@ if (cluster.isMaster) {
     console.log(`Master listening on port ${port}`);
 } else {
     // Note we don't use a port here because the master listens on it for us.
-    // let app = express();
+    let app = express();
     // app.use(express.static(__dirname + '/public'));
     // app.use(helmet());
 
