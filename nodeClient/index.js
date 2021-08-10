@@ -5,7 +5,34 @@ const io = require('socket.io-client');
 let socket = io('http://127.0.0.1:8181');
 
 socket.on('connect', () => {
-    console.log("I connected to the socket server!");
+    // console.log("I connected to the socket server!");
+
+    // We need a way to identify this machine to whomever concerned
+
+    const nI = os.networkInterfaces();
+    let macA;
+
+    // loop through all the network interfaces for this machine and find a
+    // non-internal one
+    for (let key in nI) {
+        if(!nI[key][0].internal) {
+            macA = nI[key][0].mac;
+            break;
+        }
+    }
+
+    socket.emit('clientAuth', 'asdfasdasdf234513')
+
+    // start sending data over on interval
+    let perfDataInterval = setInterval(() => {
+        performanceData().then((allPerformanceData) => {
+            // console.log("Performance data is:")
+            // console.log(allPerformanceData);
+
+            socket.emit('perfData', allPerformanceData);
+        })
+    }, 1000);
+
 })
 
 // What do we need to know from node about performance?
@@ -97,8 +124,3 @@ function getCpuLoad() {
         }, 100);
     });
 }
-
-performanceData().then((allPerformanceData) => {
-    console.log("Performance data is:")
-    console.log(allPerformanceData);
-})
