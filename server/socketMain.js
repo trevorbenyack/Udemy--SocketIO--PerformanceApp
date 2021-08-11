@@ -27,16 +27,40 @@ function socketMain(io, socket) {
 
     // A machine has connected, check to see if it's new
     // if it is, add it
-    socket.on('initPerfData', (data) => {
+    socket.on('initPerfData', async (data) => {
         // update our socket connect function-scoped variable
         macA = data.macA
         // now go check mongo!
-        checkAndAdd(macA);
+        const mongooseResponse = await checkAndAdd(data);
+        console.log(mongooseResponse);
     });
 
     socket.on('perfData', (data) => {
         // console.log(data);
     });
+}
+
+function checkAndAdd(data) {
+    // because we are doing db stuff, js won't wait for the db
+    // so we need to make this a promise
+    return new Promise((resolve, reject) => {
+        Machine.findOne(
+            {macA: data.macA},
+            (err, doc) => {
+                if(err) {
+                    // throw err;
+                    reject(err);
+                } else if(doc === null) {
+                    // The record is not in the db
+                    let newMachine = new Machine(data);
+                    newMachine.save(); // actually save it
+                    resolve('added');
+                } else {
+                    // it is in the db, just resolve
+                    resolve('found');
+                }
+            })
+    })
 }
 
 module.exports = socketMain;
