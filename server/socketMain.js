@@ -19,6 +19,7 @@ function socketMain(io, socket) {
         } else if (key === 'adsfasdfsdasf') {
             // valid UI client
             socket.join('ui');
+            console.log('A React client has joined');
         } else {
             // an invalid client has joined. Goodbye!
             socket.disconnect(true);
@@ -36,7 +37,8 @@ function socketMain(io, socket) {
     });
 
     socket.on('perfData', (data) => {
-        // console.log(data);
+        console.log("Tick...");
+        io.to('ui').emit('data', data);
     });
 }
 
