@@ -36,7 +36,7 @@ socket.on('connect', () => {
         performanceData().then((allPerformanceData) => {
             // console.log("Performance data is:")
             // console.log(allPerformanceData);
-
+            allPerformanceData.macA = macA;
             socket.emit('perfData', allPerformanceData);
         })
     }, 1000);
@@ -71,7 +71,7 @@ function performanceData() {
 
         const memUsage = Math.floor(usedMem/totalMem * 100)/100;
 
-        const osType = os.type() == 'Darwin' ? 'macOS' : os.type();
+        const osType = os.type() === 'Darwin' ? 'macOS' : os.type();
         console.log(osType);
 
         const upTime = os.uptime();

@@ -3,14 +3,31 @@ import Cpu from "./Cpu";
 import Mem from "./Mem";
 import Info from "./Info";
 
-function Widget() {
+function Widget(props) {
+
+    const {
+        freeMem,
+        totalMem,
+        usedMem,
+        memUsage,
+        osType,
+        upTime,
+        cpuModel,
+        numCores,
+        cpuSpeed,
+        cpuLoad,
+        macA
+    } = props.data
+
+    const cpu = {cpuLoad};
+    const mem = {totalMem, usedMem, memUsage, freeMem};
+    const info = {macA, osType, upTime, cpuModel, numCores, cpuSpeed};
 
     return (
         <div>
-            <h1>Widget</h1>
-            <Cpu />
-            <Mem />
-            <Info />
+            <Cpu cpuData={cpu}/>
+            <Mem memData={mem}/>
+            <Info infoData={info}/>
         </div>
     )
 }
