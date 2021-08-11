@@ -4,6 +4,8 @@ import moment from 'moment';
 function Info(props){
     return (
         <div className="col-sm-3 col-sm-offset-1 cpu-info">
+            <h3>MAC Address</h3>
+            <div className="widget-text">{props.infoData.macA}</div>
             <h3>Operating System</h3>
             <div className="widget-text">{props.infoData.osType}</div>
             <h3>Time Online</h3>

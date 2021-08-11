@@ -20,10 +20,29 @@ function socketMain(io, socket) {
             // valid UI client
             socket.join('ui');
             console.log('A React client has joined');
+            Machine.find({}, (err, docs) => {
+                console.log("machines found:");
+                console.log(docs);
+                docs.forEach((aMachine) => {
+                    // on load, assume all machines are offline
+                    aMachine.isActive = false;
+                    io.to('ui').emit('data', aMachine);
+                })
+            })
         } else {
             // an invalid client has joined. Goodbye!
             socket.disconnect(true);
         }
+    });
+
+    socket.on('disconnect', () => {
+       Machine.find({macA: macA}, ((err, docs) => {
+           if(docs.length > 0) {
+               // send one last emit to React
+               docs[0].isActive = false;
+               io.to('ui').emit('data', docs[0]);
+           }
+       }));
     });
 
     // A machine has connected, check to see if it's new
@@ -37,7 +56,6 @@ function socketMain(io, socket) {
     });
 
     socket.on('perfData', (data) => {
-        console.log("Tick...");
         io.to('ui').emit('data', data);
     });
 }
@@ -61,8 +79,8 @@ function checkAndAdd(data) {
                     // it is in the db, just resolve
                     resolve('found');
                 }
-            })
-    })
+            });
+    });
 }
 
 module.exports = socketMain;

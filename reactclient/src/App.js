@@ -6,6 +6,10 @@ import Widget from "./Widget";
 
 function App() {
 
+    let widgets = [];
+
+    console.log("app component loaded")
+
     // Declare a new state variable, which we'll call "perfData"
     const [perfData, setPerfData] = useState({});
     const [isConnected, setIsConnected] = useState(false);
@@ -28,13 +32,39 @@ function App() {
                 // so lets update state so we can re-render App --> Widget --> CPU/Mem/Info
                 // we need to make a copy of current state so we can mutate it
 
-                const currentState = ({...perfData});
+                console.log("perfData is:");
+                console.log(perfData);
 
-                // currentState is an object! Not an Array
-                // The reason for this is so we can use the machine's
-                // macA as it's property
-                currentState[data.macA] = data;
-                setPerfData(currentState);
+
+                setPerfData(perfData => {
+                    const currentState = ({...perfData});
+
+                    console.log("pre currentState is:");
+                    console.log(currentState);
+                    console.log(`data.macA is: ${data.macA}`);
+
+
+                    // currentState is an object! Not an Array
+                    // The reason for this is so we can use the machine's
+                    // macA as it's property
+                    currentState[data.macA] = data;
+
+                    console.log("post currentState is:");
+                    console.log(currentState);
+
+                    console.log("pre setPerf()")
+
+                    return currentState;
+                });
+                console.log("after setPerf() has been called")
+
+                // console.log("post setPerf currentstate is:");
+                // console.log(currentState);
+
+                console.log("perfData is:");
+                console.log(perfData);
+
+
 
                 // console.log(currentState);
 
@@ -42,20 +72,27 @@ function App() {
         } // end if(!isConnected){}
     });
 
-    let widgets = [];
+    console.log(perfData);
+
     // grab each machine, by property from data
     Object.entries(perfData).forEach(([key, value]) => {
+
+
         // Anytime there is an array in react, a key should be specified
         // This allows react to treat the array almost like a linked list
         // where it can e very efficient in managing the array as things
         // change in the DOM
         widgets.push(<Widget key={key} data={value} />);
 
-        console.log(`key is:`);
-        console.log(key);
-        console.log('value is:');
-        console.log(value);
+        // console.log(`key is:`);
+        // console.log(key);
+        // console.log('value is:');
+        // console.log(value);
     });
+
+    console.log("widgets is:");
+    console.log(widgets);
+
 
     return (
         <div>

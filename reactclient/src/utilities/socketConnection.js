@@ -17,7 +17,6 @@ export const subscribeToData = (cb) => {
     }
 
     socket.on('data', (data) => {
-        console.log('Data event received');
         return cb(null, data);
     });
 }

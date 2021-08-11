@@ -15,6 +15,12 @@ socket.on('connect', () => {
     // loop through all the network interfaces for this machine and find a
     // non-internal one
     for (let key in nI) {
+
+        //TODO: FOR TESTING PURPOSES!!!
+        macA = Math.floor(Math.random() * 3 + 1);
+        break;
+        // END TESTING
+
         if(!nI[key][0].internal) {
             macA = nI[key][0].mac;
             break;
@@ -81,6 +87,7 @@ function performanceData() {
         const cpuSpeed = cpus[0].speed;
         const numCores = cpus.length;
         const cpuLoad = await getCpuLoad();
+        const isActive = true;
         resolve({
             freeMem,
             totalMem,
@@ -91,10 +98,11 @@ function performanceData() {
             cpuModel,
             numCores,
             cpuSpeed,
-            cpuLoad
+            cpuLoad,
+            isActive
         });
-    })
-}
+    }); // end return new Promise
+} // end performanceData()
 
 
 // cpus is all numCores... we need the average all the cores
