@@ -21,7 +21,4 @@ export const subscribeToData = (cb) => {
     });
 }
 
-
-
-
 export default socket;
